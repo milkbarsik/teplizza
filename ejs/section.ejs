@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>section <%= sectionNum %></title>
+	<link rel="stylesheet" href="/section.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<header>
+			<div class="number"><h1>Секция <%= sectionNum %></h1></div>
+			<div class="data">
+				<div class="environment-log p log-button" data-button="1">environment-log</div>
+				<div class="watering-log p log-button" data-button="2">watering-log</div>
+				<div class="feed-log p log-button" data-button="3">feed-log</div>
+			</div>
+		</header>
+		<div class="main-content">
+			<div class="change-data-frame">
+				<h3>change data</h3>
+				<div class="change-data">
+					<%-include('./components/input.ejs', {
+						title: 't',
+						placeholder: 'temperature',
+						name: 'temperature',
+						inputId: 'input1',
+						buttonId: 'button1',
+					}) %>
+					<%-include('./components/input.ejs', {
+						title: 'f',
+						placeholder: 'wetness',
+						name: 'wetness',
+						inputId: 'input2',
+						buttonId: 'button2',
+					}) %>
+					<%-include('./components/input.ejs', {
+						title: 'e',
+						placeholder: 'light',
+						name: 'light',
+						inputId: 'input3',
+						buttonId: 'button3',
+					}) %>
+				</div>
+			</div>
+			<div class="plants-frame">
+				<% plants.forEach(plant => { %>
+				<div class="plant" data-id="<%= plant.id %>">
+					<div class="plant-number" data-id="<%= plant.id %>"><%= plant.number_in_section %></div>
+					<div class="name" data-id="<%= plant.id %>"><%= plant.name_of_plant %></div>
+				</div>
+				<% }); %>
+			</div>
+			<div class="log-frame">
+				<h3 id="log_name"></h3>
+				<div class="logs">
+					<!-- place of logs -->
+				</div>
+			</div>
+		</div>
+		<footer>
+			<div class="foot-wrap">
+				<div class="data">
+					<div class="temperature p">температура: <%= section.temperature %>C</div>
+					<div class="wetness p">влажность: <%= section.wetness %>%</div>
+					<div class="light p">освещение: <%= section.light %>lx</div>
+				</div>
+				<div class="time p">date</div>
+			</div>
+		</footer>
+	</div>
+
+	<script type="text/javascript">
+		const sectionNum = '<%= sectionNum %>';
+		const plants = JSON.parse('<%- JSON.stringify(plants) %>');
+	</script>
+	<script type="text/javascript" src="/scripts/logs.js"></script>
+	<script type="text/javascript" src="/scripts/changes.js"></script>
+
+</body>
+</html>

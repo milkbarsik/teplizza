@@ -1,0 +1,31 @@
+<div class="change-data-row">
+	<p><%= title %></p>
+	<div class="input-frame">
+		<input name="<%= name %>" type="number" placeholder="<%= placeholder %>" value="" class="input-place" id="<%= inputId %>">
+		<input type="submit" value="send" class="input-button" id="<%= buttonId %>">
+	</div>
+</div>
+
+<style>
+	.input-frame {
+		display: flex;
+		justify-content: space-between;
+		width: 90%;
+	}
+	.input-place {
+		border-radius: 5px;
+		border: 1px black solid;
+		font-size: calc((1vh + 1vw) / 2);
+		width: 70%;
+		background-color: rgb(189, 251, 255);
+		padding-left: calc((1vh + 1vw) / 2);
+	}
+	.input-button {
+		width: 20%;
+		background-color: rgb(189, 251, 255);
+		border-radius: 5px;
+		border: 1px black solid;
+		font-size: calc((1vh + 1vw) / 2);
+		cursor: pointer;
+	}
+</style>
