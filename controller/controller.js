@@ -53,19 +53,6 @@ class Controller {
 			res.status(500).send('DB Error');
 		}
 	}
-
-	async saveLogs (req, res) {
-		try {
-			const id = req.params.id;
-			const {environment_log, watering_log, feed_log} = req.body;
-			const saveEnvironment = await db.query(`insert into environment_log (temperature, wetness, light, setcion_id, time_log) values (${parseFloat(environment_log.temperuture)}, ${parseInt(environment_log.wetness)}, ${parseInt(environment_log.light)}, ${parseInt(environment_log.section_id)}, now())`);
-			const saveWatering = await db.query(`insert into watering_log (plant_id, staff_id, time_log) values (${parseInt(watering_log.plant_id)}, ${parseInt(watering_log.staff_id)}, now())`);
-			const saveFeed = await db.query(`insert into feed_log (plant_id, staff_id, time_log) values (${parseInt(feed_log.plant_id)}, ${parseInt(feed_log.staff_id)}, now())`);
-		} catch (err) {
-			console.error(err);
-			res.status(500).send('DB Error');
-		}
-	}
 }
 
 module.exports = new Controller();

@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const router = require('./router/router')
 const moment = require('moment');
+const teplizza = require('./simulation/teplizza');
 
 const app = express();
 
@@ -16,7 +17,7 @@ app.use('/api', router)
 const createPath = (page) => path.resolve(__dirname, 'ejs', `${page}.ejs`);
 
 app.listen(PORT, (error) => {
-	error ? console.log(error) : console.log(`listening port ${PORT}`);
+	error ? console.log(error) : teplizza();
 })
 
 const customDate = new Date('2049-09-19T22:22:22Z');
