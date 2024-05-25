@@ -22,13 +22,16 @@ class TeplizzaController {
 
 	async getData () {
 		try {
-			const data = await db.query('select * from sections order by id');
-			return (data.rows);
+			const sections = await db.query('select * from sections order by id');
+			const plants = await db.query('select * from plants order by section_id, number_in_section');
+			const data = {sections: sections.rows, plants: plants.rows}
+			return (data);
 		} catch (err) {
 			console.log(err);
 			throw new Error('DB error');
 		}
 	}
+
 };
 
 module.exports = new TeplizzaController;

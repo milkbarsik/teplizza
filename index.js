@@ -2,8 +2,6 @@ const express = require('express');
 const path = require('path');
 const router = require('./router/router')
 const moment = require('moment');
-const teplizza = require('./simulation/teplizza');
-
 const app = express();
 
 app.set('vie engine', 'ejs');
@@ -16,8 +14,8 @@ app.use('/api', router)
 
 const createPath = (page) => path.resolve(__dirname, 'ejs', `${page}.ejs`);
 
-app.listen(PORT, (error) => {
-	error ? console.log(error) : teplizza();
+app.listen(PORT, async (error) => {
+	error ? console.log(error) : 'server is started';
 })
 
 const customDate = new Date('2049-09-19T22:22:22Z');

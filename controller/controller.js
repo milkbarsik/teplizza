@@ -1,6 +1,18 @@
 const db = require('../db');
+const teplizzaPromise = require('../simulation/teplizza');
+
 
 class Controller {
+	#teplizza;
+	
+	constructor() {
+		this.initialize();
+	}
+
+	async initialize() {
+			this.#teplizza = await teplizzaPromise;
+	}
+
   async getSections(req, res) {
     try {
       const sections = await db.query('select * from sections order by id');
@@ -47,6 +59,7 @@ class Controller {
 			const sectionNum = req.params.sectionNum;
 			const {name, data} = req.body;
 			const changes = await db.query(`update sections set ${name} = $1 where id = $2 returning *`, [data, sectionNum]);
+			await this.#teplizza.updateSection(sectionNum, {environmentName: name, changeData: data});
 			res.json(changes.rows);
 		} catch (err) {
 			console.error(err);
