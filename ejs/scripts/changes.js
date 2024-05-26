@@ -45,9 +45,9 @@ changeLevels.addEventListener('click', async () => {
 		})
 		const changeData = await response.json();
 		if (changeData.default_water_level) {
-			document.querySelector('#plant-water-level').innerText = `${changeData.default_water_level.rows[0].water_level} hours`;
+			document.querySelector('#plant-water-level').innerText = `${changeData.default_water_level.rows[0].water_level} hours (${changeData.default_water_level.rows[0].default_water_level})`;
 		} if (changeData.default_feed_level) {
-			document.querySelector('#plant-feed-level').innerText = `${changeData.default_feed_level.rows[0].feed_level} hours`;
+			document.querySelector('#plant-feed-level').innerText = `${changeData.default_feed_level.rows[0].feed_level} hours (${changeData.default_feed_level.rows[0].default_feed_level})`;
 		}
 	}
 	plantInput[0].value = plantInput[1].value = '';

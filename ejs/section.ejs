@@ -97,17 +97,19 @@
 					<div class="wetness p">влажность: <%= section.wetness %>%</div>
 					<div class="light p">освещение: <%= section.light %>lx</div>
 				</div>
-				<div class="time p">date</div>
+				<div class="reload">
+					<p id="new-data">появились новые данные</p>
+					<button class="plant-button" id="reload">обновить</button>
+				</div>
 			</div>
 		</footer>
 	</div>
-
 	<script type="text/javascript">
 		const sectionNum = '<%= sectionNum %>';
 		const plants = JSON.parse('<%- JSON.stringify(plants) %>');
 	</script>
+	<script type="text/javascript" src="/scripts/websocketSection.js"></script>
 	<script type="text/javascript" src="/scripts/logs.js"></script>
 	<script type="text/javascript" src="/scripts/changes.js"></script>
-
 </body>
 </html>

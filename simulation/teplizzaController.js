@@ -1,11 +1,26 @@
 const db = require('../db');
+const WebSocket = require('ws');
+
+const wss = new WebSocket.Server({ port: 3333 });
+
+wss.on('connection', (ws) => {
+  console.log('New WebSocket client connected');
+
+  ws.on('message', (message) => {
+    console.log(`Received message: ${message}`);
+  });
+
+  ws.on('close', () => {
+    console.log('WebSocket client disconnected');
+  });
+});
 
 class TeplizzaController {
 	async saveEnvironmentLog (data) {
 		try {
 			const environment_log = data;
 			const saveEnvironment = await db.query(
-				`insert into environment_log (temperature, wetness, light, section_id, time_log) VALUES ($1, $2, $3, $4, now())`,
+				`insert into environment_log (temperature, wetness, light, section_id, time_log) VALUES ($1, $2, $3, $4, now()) returning *`,
 				[
 						parseFloat(environment_log.temperature), 
 						parseInt(environment_log.wetness), 
@@ -13,7 +28,7 @@ class TeplizzaController {
 						parseInt(environment_log.section_id)
 				]
 		);
-			return saveEnvironment.rows;
+			// return await saveEnvironment.rows[0];
 		} catch (err) {
 				console.error(err);
 				throw new Error('DB Error');
@@ -55,4 +70,4 @@ class TeplizzaController {
 	}
 };
 
-module.exports = new TeplizzaController;
+module.exports = {controller: new TeplizzaController, wss: wss };

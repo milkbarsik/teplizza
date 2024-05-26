@@ -1,4 +1,5 @@
-const controller = require('./teplizzaController');
+const WebSocket = require('ws');
+const { controller, wss } = require('./teplizzaController');
 
 class Teplizza {
 	#sections;
@@ -15,12 +16,22 @@ class Teplizza {
 		for (let section of this.#sections) {
 				await section.createEnvironmentLog();
 		}
+		wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({ message: 'Environment logs updated', type: 'environment' }));
+      }
+    });
 	}
 
 	async updateSection (sectionId, data) {
 		const changeSection = Array.from(this.#sections).find(section => section.getId() == sectionId);
 		const {environmentName, changeData} = data;
 		await changeSection.setEnvironment(environmentName, changeData);
+		wss.clients.forEach((client) => {
+			if (client.readyState === WebSocket.OPEN) {
+				client.send(JSON.stringify({ message: 'update', type: 'home' }));
+			}
+		});
 	}
 
 	deletePlant(plantId) {
@@ -35,12 +46,22 @@ class Teplizza {
 					console.log(plant);
 					await controller.createWaterAndFeedLog({plantId: plant.id, staffId: Math.floor(this.#staffSchedule / 2) + 1, level: plant.default_water_level}, {typeLog: 'watering_log', typeData: 'water_level'});
 					plant.water_level = plant.default_water_level;
+					wss.clients.forEach((client) => {
+						if (client.readyState === WebSocket.OPEN) {
+							client.send(JSON.stringify({ message: `полив ${plant.number_in_section} ${plant.name_of_plant}`, sectionId: plant.section_id}));
+						}
+					});
 				};
 				plant.feed_level--;
 				if(plant.feed_level <= 0) {
 					console.log(plant);
 					await controller.createWaterAndFeedLog({plantId: plant.id, staffId: Math.floor(this.#staffSchedule / 2) + 1, level: plant.default_feed_level}, {typeLog: 'feed_log', typeData: 'feed_level'});
 					plant.feed_level = plant.default_feed_level;
+					wss.clients.forEach((client) => {
+						if (client.readyState === WebSocket.OPEN) {
+							client.send(JSON.stringify({ message: `подкорм ${plant.number_in_section} ${plant.name_of_plant}`, sectionId: plant.section_id}));
+						}
+					});
 				};
 				await controller.changeWaterAndFeedLevel ({water_level: plant.water_level, feed_level: plant.feed_level, id: plant.id});
 			}
@@ -147,8 +168,8 @@ const main = async () => {
 		staff.push(person);
 	});
 	const teplizzaObject = new Teplizza(sections, staff);
-	setInterval(async () => {await teplizzaObject.createEnvironmentLogs(); await teplizzaObject.waterAndFeedLevelControl()}, 3600000);
-	//setInterval(() => {teplizzaObject.waterAndFeedLevelControl()}, 5000);
+	setInterval(async () => {await teplizzaObject.createEnvironmentLogs(); /*await teplizzaObject.waterAndFeedLevelControl()*/}, 3600000);
+	setInterval(async () => {await teplizzaObject.waterAndFeedLevelControl()}, 600000);
 	console.log('teplizza is started');
 	return teplizzaObject;
 }

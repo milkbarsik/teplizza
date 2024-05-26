@@ -251,3 +251,17 @@ footer {
 	font-size: 1.2rem;
 	margin: 0 2rem;
 }
+
+.reload {
+	width: auto;
+	display: flex;
+	align-items: center;
+	justify-content: right;
+	padding: 0 calc((1vh + 1vw));
+}
+#reload {
+	width: auto;
+	padding: 0 calc((1vh + 1vw) / 2);
+	margin: 0 calc((1vh + 1vw));
+	background-color: rgba(0, 255, 85, 0.678);
+}

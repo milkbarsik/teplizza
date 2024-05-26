@@ -5,37 +5,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="/home.css">
 	<title>home</title>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-	<script>
-    if (moment) {
-        function updateTime() {
-            const elem = document.getElementById('time');
-            // Парсим исходное время, предполагая, что оно в формате ISO
-            let now = moment.utc(elem.textContent);  // Используем moment.utc для работы с временем в UTC
-
-            // Прибавляем одну секунду
-            now.add(1, 'seconds');
-
-            // Форматируем время для отображения
-            const formatted = now.format('YYYY-MM-DD HH:mm:ss');
-            elem.textContent = formatted;
-
-            // Вызываем updateTime снова через 1000 мс (1 секунда)
-            setTimeout(updateTime, 1000);
-        }
-
-        // Запускаем updateTime, когда DOM полностью загружен
-        document.addEventListener('DOMContentLoaded', updateTime);
-    } else {
-        console.error('Moment.js не загружен!');
-    }
-</script>
 </head>
 <body>
 	<div class="wrapper">
 		<footer>
 			<div class="foot-wrap">
-				<div class="time"><p id="time"><%= currentTime %></p></div>
+
 			</div>
 		</footer>
 		<div class="main-content">
@@ -58,5 +33,6 @@
 		</div>
 
 	</div>
+	<script type="text/javascript" src="/scripts/websocketHome.js"></script>
 </body>
 </html>
