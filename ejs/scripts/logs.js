@@ -1,6 +1,6 @@
 var now_log = 1;
 var globalLogs;
-
+const plantChanges = document.getElementById('plant-changes');
 async function fetchGlobalLogs() {
 	globalLogs = await (await fetch(`http://localhost:5555/api/plant/${sectionNum}/${0}`)).json();
 }
@@ -13,6 +13,14 @@ document.addEventListener('click', async (e) => {
 	const id = e.target?.dataset?.id || null;
 	const button = e.target?.dataset?.button || null;
 	if(id) {
+		const plantData = Array.from(plants).find(plant => plant.id == id);
+		plantChanges.style = '';
+		plantChanges.dataset.plantId = plantData.id;
+		document.querySelector('#plant-info-number').innerText = plantData.number_in_section;
+		document.querySelector('#plant-info-name').innerText = plantData.name_of_plant;
+		document.querySelector('#planting-date').innerText = moment(plantData.planting_date).format('DD-MM-YYYY');
+		document.querySelector('#plant-water-level').innerText = `${plantData.water_level} hours`;
+		document.querySelector('#plant-feed-level').innerText = `${plantData.feed_level} hours`;
 		const data_logs = await fetch(`http://localhost:5555/api/plant/${sectionNum}/${id}`);
 		const logs = await data_logs.json();
 		globalLogs = logs;

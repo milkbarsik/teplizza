@@ -42,6 +42,37 @@
 						inputId: 'input3',
 						buttonId: 'button3',
 					}) %>
+					<div class="change-plant">
+						<div class="change-plant-row plant-info-number">
+							<p>№</p>
+							<p id="plant-info-number"></p>
+						</div>
+						<div class="change-plant-row plant-info-name">
+							<p>name</p>
+							<p id="plant-info-name"></p>
+						</div>
+						<div class="change-plant-row planting-date">
+							<p>planting date</p>
+							<p id="planting-date"></p>
+						</div>
+						<div class="change-plant-row plant-water-level">
+							<p>полив через:</p>
+							<p id="plant-water-level"></p>
+						</div>
+						<div class="change-plant-row plant-feed-level">
+							<p>подкормка через:</p>
+							<p id="plant-feed-level"></p>
+						</div>
+						<div data-plantId="" style="display: none;" class="change-plant-row plant-changes" id="plant-changes">
+							<p>изменить интервал</p>
+							<input type="number" placeholder="watering" value="" name="" class="plant-input">
+							<input type="number" placeholder="feeding" value="" name="" class="plant-input">
+							<div class="plant-buttons">
+								<input type="submit" value="send" class="plant-button" id="change-levels">
+								<button id="delete-button" class=" plant-button delete-plant-button">delete plant</button>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="plants-frame">

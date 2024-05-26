@@ -105,6 +105,68 @@ header {
 	text-align: center;
 }
 
+.change-plant {
+	margin: calc(1vh + 1vw);
+	border: 1px black solid;
+	border-radius: 5px;
+	padding: calc(1vh + 1vw);
+}
+
+.change-plant-row {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	justify-content: left;
+}
+.change-plant-row p {
+	margin-right: calc(1vh + 1vw);
+}
+
+.plant-changes {
+	display: flex;
+	flex-direction: column;
+	align-items: start;
+}
+
+.plant-buttons {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+}
+
+.plant-input {
+	border-radius: 5px;
+	border: 1px black solid;
+	font-size: calc((1vh + 1vw) / 2);
+	width: 70%;
+	background-color: rgb(189, 251, 255);
+	padding-left: calc((1vh + 1vw) / 2);
+	height: calc((1vh + 1vw) * 1.1);
+	margin-bottom: calc((1vh + 1vw)/2);
+}
+.plant-button {
+	width: 20%;
+	background-color: rgb(189, 251, 255);
+	border-radius: 5px;
+	border: 1px black solid;
+	font-size: calc((1vh + 1vw) / 2);
+	min-height: calc((1vh + 1vw) * 1.1);
+	cursor: pointer;
+	transition: 0.1s linear;
+}
+
+.delete-plant-button {
+	background-color: rgba(255, 121, 121, 0.712);
+}
+
+.plant-button:hover {
+	transform: scale(0.98);
+}
+.plant-button:active {
+	transform: scale(1.05);
+}
+
 .plants-frame {
 	display: flex;
 	flex-wrap: wrap;

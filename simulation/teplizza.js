@@ -3,10 +3,12 @@ const controller = require('./teplizzaController');
 class Teplizza {
 	#sections;
 	#staff;
+	#staffSchedule;
 
-	constructor(sections = new Set(), staff = new Set()) {
+	constructor(sections = new Set(), staff = []) {
 		this.#sections = sections;
 		this.#staff = staff;
+		this.#staffSchedule = 0;
 	}
 
 	async createEnvironmentLogs() {
@@ -19,6 +21,52 @@ class Teplizza {
 		const changeSection = Array.from(this.#sections).find(section => section.getId() == sectionId);
 		const {environmentName, changeData} = data;
 		await changeSection.setEnvironment(environmentName, changeData);
+	}
+
+	deletePlant(plantId) {
+		Array.from(this.#sections).forEach(section => {section.deletePlant(plantId)});
+	}
+
+	async waterAndFeedLevelControl () {
+		for (let section of this.#sections) {
+			for (let plant of section.getPlants()) {
+				plant.water_level--;
+				if(plant.water_level <= 0) {
+					console.log(plant);
+					await controller.createWaterAndFeedLog({plantId: plant.id, staffId: Math.floor(this.#staffSchedule / 2) + 1, level: plant.default_water_level}, {typeLog: 'watering_log', typeData: 'water_level'});
+					plant.water_level = plant.default_water_level;
+				};
+				plant.feed_level--;
+				if(plant.feed_level <= 0) {
+					console.log(plant);
+					await controller.createWaterAndFeedLog({plantId: plant.id, staffId: Math.floor(this.#staffSchedule / 2) + 1, level: plant.default_feed_level}, {typeLog: 'feed_log', typeData: 'feed_level'});
+					plant.feed_level = plant.default_feed_level;
+				};
+				await controller.changeWaterAndFeedLevel ({water_level: plant.water_level, feed_level: plant.feed_level, id: plant.id});
+			}
+		}
+		if(this.#staffSchedule++ == this.#staff.length * 2 - 1) {
+			this.#staffSchedule = 0;
+		}
+	}
+
+	async changeWaterAndFeedLevel (plantId, data) {
+		for (let section of this.#sections) {
+			for (let plant of section.getPlants()) {
+				if (plant.id == plantId) {
+          const { default_water_level, default_feed_level } = data;
+					console.log(default_water_level, default_feed_level);
+          if (!isNaN(parseInt(default_water_level))) {
+						plant.water_level += parseInt(default_water_level) - plant.default_water_level;
+						plant.default_water_level = parseInt(default_water_level);
+					}
+          if (!isNaN(parseInt(default_feed_level))) {
+						plant.feed_level += default_feed_level - plant.default_feed_level;
+						plant.default_feed_level = parseInt(default_feed_level);
+					}
+        }
+			}
+		}
 	}
 }
 
@@ -39,6 +87,18 @@ class Section {
 
 	getId() {
 		return this.#id;
+	}
+
+	getPlants() {
+		return this.#plants;
+	}
+
+	deletePlant (id) {
+		const plant = Array.from(this.#plants).find(plant => plant.id == id);
+		if(plant) {
+			console.log(plant);
+			this.#plants.delete(plant);
+		}
 	}
 
 	async setEnvironment(environmentName, data) {
@@ -82,9 +142,13 @@ const main = async () => {
 			);
 			sections.add(section);
 	});
-
-	const teplizzaObject = new Teplizza(sections);
-	setInterval(async () => {await teplizzaObject.createEnvironmentLogs()}, 3600000);
+	const staff = [];
+	data.staff.forEach(person => {
+		staff.push(person);
+	});
+	const teplizzaObject = new Teplizza(sections, staff);
+	setInterval(async () => {await teplizzaObject.createEnvironmentLogs(); await teplizzaObject.waterAndFeedLevelControl()}, 3600000);
+	//setInterval(() => {teplizzaObject.waterAndFeedLevelControl()}, 5000);
 	console.log('teplizza is started');
 	return teplizzaObject;
 }

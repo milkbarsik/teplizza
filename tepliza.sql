@@ -14,6 +14,10 @@ CREATE TABLE plants (
     number_in_section INT NOT NULL,
     name_of_plant VARCHAR(255) NOT NULL,
     planting_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+		water_level INT NOT NULL DEFAULT 24,
+		default_water_level INT NOT NULL DEFAULT 24,
+		feed_level INT NOT NULL DEFAULT 48,
+		default_feed_level INT NOT NULL DEFAULT 48,
     FOREIGN KEY (section_id) REFERENCES sections(id),
     UNIQUE (section_id, number_in_section)
 );
@@ -43,7 +47,7 @@ CREATE TABLE watering_log (
     plant_id INT NOT NULL,
     staff_id INT NOT NULL,
     time_log TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (plant_id) REFERENCES plants(id),
+    FOREIGN KEY (plant_id) REFERENCES plants(id) ON DELETE CASCADE,
     FOREIGN KEY (staff_id) REFERENCES staff(id)
 );
 
@@ -53,7 +57,7 @@ CREATE TABLE feed_log (
     plant_id INT NOT NULL,
     staff_id INT NOT NULL,
     time_log TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (plant_id) REFERENCES plants(id),
+    FOREIGN KEY (plant_id) REFERENCES plants(id) ON DELETE CASCADE,
     FOREIGN KEY (staff_id) REFERENCES staff(id)
 );
 
