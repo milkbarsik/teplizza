@@ -48,7 +48,7 @@ class Teplizza {
 					plant.water_level = plant.default_water_level;
 					wss.clients.forEach((client) => {
 						if (client.readyState === WebSocket.OPEN) {
-							client.send(JSON.stringify({ message: `полив ${plant.number_in_section} ${plant.name_of_plant}`, sectionId: plant.section_id}));
+							client.send(JSON.stringify({ message: `полив №${plant.number_in_section} ${plant.name_of_plant}`, sectionId: plant.section_id}));
 						}
 					});
 				};
@@ -59,7 +59,7 @@ class Teplizza {
 					plant.feed_level = plant.default_feed_level;
 					wss.clients.forEach((client) => {
 						if (client.readyState === WebSocket.OPEN) {
-							client.send(JSON.stringify({ message: `подкорм ${plant.number_in_section} ${plant.name_of_plant}`, sectionId: plant.section_id}));
+							client.send(JSON.stringify({ message: `подкорм №${plant.number_in_section} ${plant.name_of_plant}`, sectionId: plant.section_id}));
 						}
 					});
 				};
@@ -168,8 +168,8 @@ const main = async () => {
 		staff.push(person);
 	});
 	const teplizzaObject = new Teplizza(sections, staff);
-	setInterval(async () => {await teplizzaObject.createEnvironmentLogs(); /*await teplizzaObject.waterAndFeedLevelControl()*/}, 3600000);
-	setInterval(async () => {await teplizzaObject.waterAndFeedLevelControl()}, 600000);
+	setInterval(async () => {await teplizzaObject.createEnvironmentLogs(); await teplizzaObject.waterAndFeedLevelControl()}, 3600000);
+	//setInterval(async () => {await teplizzaObject.waterAndFeedLevelControl()}, 3600000);
 	console.log('teplizza is started');
 	return teplizzaObject;
 }

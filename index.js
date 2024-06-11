@@ -18,14 +18,13 @@ app.listen(PORT, async (error) => {
 	error ? console.log(error) : 'server is started';
 })
 
-const customDate = new Date('2049-09-19T22:22:22Z');
 
 app.get('/', async (req, res) => {
 	try {
 		const data = await fetch(`http://localhost:${PORT}/api/home`);
 		const sections = await data.json();
 		if (sections) {
-			res.render(createPath('home'), { sections: sections, currentTime: customDate.toISOString()});
+			res.render(createPath('home'), { sections: sections });
 		} else {
 			res.status(404).send('Section not found');
 		}
